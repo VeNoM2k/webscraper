@@ -44,16 +44,23 @@ for page in range(1, 101):
 			divs = item.find_all('div', {'style': 'width:25%'})
 			divs2 = item.find_all('div', {'style': 'width:100%'})
 
+
 			#for 4 elements in a row
 			if len(divs) != 0:
 
 				for div_tab in divs:
 					element_list = []
-					element_list.append(div_tab.get('data-id'))
 					rank = rank + 1
 					element_list.append(rank)
-					spantag = div_tab.find_all('span')
+					element_list.append(div_tab.get('data-id'))
 
+					fassured = div_tab.find_all('img', {'src': '//static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png'})
+					if len(fassured) >= 1:
+						element_list.append(1)#product is flipkart assured
+					else:
+						element_list.append(0)
+
+					spantag = div_tab.find_all('span')
 					#for checking AD
 					for span in spantag:
 						if span.text == 'Ad':
