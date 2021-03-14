@@ -25,7 +25,7 @@ data_list = []
 rank = 0
 
 #First 5 pages
-for page in range(1, 6):
+for page in range(1, 2):
 	print('Processing page no: ', page, ' ****************************************************************************************')
 	url = get_url('laptop')
 	extension = '&page=' + str(page)
@@ -168,5 +168,10 @@ for page in range(1, 6):
 							#for each in results3:
 							#	print(each.text)
 
+					element_list.append(seller_list)
+
+					data_list.append(element_list)
+
+					
 for listele in data_list:
 	print(listele)
