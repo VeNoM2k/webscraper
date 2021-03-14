@@ -24,8 +24,8 @@ rank = 0
 #page = 0
 #flag = 1
 
-#change range to (1, 101)
-for page in range(1, 6):
+#first 100 pages
+for page in range(1, 101):
 	#page = page + 1
 	print('Processing page no: ', page, ' ****************************************************************************************')
 	url = get_url('laptop')
@@ -37,25 +37,18 @@ for page in range(1, 6):
 
 	#for every row
 	results = soup.find_all('div',{'class': '_1AtVbE col-12-12'})
-
-	#for every element
-	#results = soup.find_all('div',{'class': '_1xHGtK _373qXS'})
 	for result in results:
 		next_div = result.find_all('div',{'class': '_13oc-S'})
 
 		for item in next_div:
 			divs = item.find_all('div', {'style': 'width:25%'})
 			divs2 = item.find_all('div', {'style': 'width:100%'})
-			#print('========')
-			#print(len(divs))
-			#print(len(divs2))
 
 			#for 4 elements in a row
 			if len(divs) != 0:
 
 				for div_tab in divs:
 					element_list = []
-					#print(div_tab.get('data-id'))
 					element_list.append(div_tab.get('data-id'))
 					rank = rank + 1
 					element_list.append(rank)
@@ -64,7 +57,6 @@ for page in range(1, 6):
 					#for checking AD
 					for span in spantag:
 						if span.text == 'Ad':
-							#print('Advertised')
 							element_list.append(1) #1 means it is advertised
 						else:
 							element_list.append(0)
@@ -73,8 +65,7 @@ for page in range(1, 6):
 					for a in atags:
 						if a.get('title'):
 							element_list.append(a.get('title'))
-							#print(a.get('title'))
-							#print('--------------------')
+
 					data_list.append(element_list)
 
 			#for 1 element in a row
@@ -94,7 +85,6 @@ for page in range(1, 6):
 
 					element_list.append(flag)
 					a = div_tab.find('a')
-					#print(a.text)
 					element_list.append(a.text)
 
 					data_list.append(element_list)
