@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as W
 from selenium.webdriver.support import expected_conditions as EC
+import pandas as pd
 import time
 
 #Path for chrome driver in local machine
@@ -24,11 +25,12 @@ rank = 0
 #page = 0
 #flag = 1
 
-#first 100 pages
-for page in range(1, 101):
+#First 5 pages
+#Change range to increase the no of pages to traverse
+for page in range(1, 2):
 	#page = page + 1
 	print('Processing page no: ', page, ' ****************************************************************************************')
-	url = get_url('laptop')
+	url = get_url('shoes')
 	extension = '&page=' + str(page)
 	url += extension
 	driver.get(url)
@@ -62,16 +64,18 @@ for page in range(1, 101):
 
 					spantag = div_tab.find_all('span')
 					#for checking AD
+					flag = 0
 					for span in spantag:
 						if span.text == 'Ad':
-							element_list.append(1) #1 means it is advertised
-						else:
-							element_list.append(0)
+							flag = 1 #1 means it is advertised
+							break
+					element_list.append(flag)
 
-					atags = div_tab.find_all('a')
-					for a in atags:
-						if a.get('title'):
-							element_list.append(a.get('title'))
+					#dont need following line
+					#atags = div_tab.find_all('a')
+					#for a in atags:
+					#	if a.get('title'):
+					#		element_list.append(a.get('title'))
 
 					data_list.append(element_list)
 
@@ -82,6 +86,11 @@ for page in range(1, 101):
 					element_list.append(div_tab.get('data-id'))
 					rank = rank + 1
 					element_list.append(rank)
+					fassured = div_tab.find_all('img', {'src': '//static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/fa_62673a.png'})
+					if len(fassured) >= 1:
+						element_list.append(1)#product is flipkart assured
+					else:
+						element_list.append(0)
 					spantag = div_tab.find_all('span')
 
 					#for checking AD
@@ -89,12 +98,14 @@ for page in range(1, 101):
 					for span in spantag:
 						if span.text == 'Ad':
 							flag = 1 #1 means it is advertised
-
 					element_list.append(flag)
 					a = div_tab.find('a')
-					element_list.append(a.text)
+					#dont need next line
+					#element_list.append(a.text)
 
 					data_list.append(element_list)
 
-for listele in data_list:
-	print(listele)
+frame = pd.DataFrame(data_list, columns = ['Rank', 'Data-id', 'Flipkart-Assured?', 'Advertised?'])
+frame.to_csv('Product_info_scraper2.csv')
+#for listele in data_list:
+#	print(listele)
