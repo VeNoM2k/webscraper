@@ -27,6 +27,7 @@ data_list = []
 rank = 0
 
 #First 5 pages
+#Change range to increase the no of pages to traverse
 for page in range(1, 2):
 	print('Processing page no: ', page, ' ****************************************************************************************')
 
@@ -58,8 +59,17 @@ for page in range(1, 2):
 						if a.get('title'):
 							product_url = 'https://www.flipkart.com' + a.get('href')
 							break
+					element_list.append(product_url)
 					driver.get(product_url)
 					soup1 = BeautifulSoup(driver.page_source, 'html.parser')
+					try:
+						titletag = soup1.find('div',{'class': 'aMaAEs'})
+						titletag2 = titletag.find('h1',{'class': 'yhB1nd'})
+						titletag3 = titletag2.find('span',{'class': 'B_NuCI'})
+						producttitle = titletag3.text
+						element_list.append(producttitle)
+					except:
+						element_list.append("")
 					results = soup1.find('div',{'class': '_3_L3jD'})
 					try:
 						spantag = results.find_all('span')
@@ -88,6 +98,21 @@ for page in range(1, 2):
 					seller_list = []
 
 					litag = soup1.find_all('li', {'class': '_38I6QT'})
+
+					sellertag = soup1.find_all('div',{'id': 'sellerName'})
+					for tag in sellertag:
+						fe_seller_info = []
+						spantag = tag.find('span')
+						seller_name = spantag.find('span')
+						fe_seller_info.append(seller_name.text)
+							#print(seller_name.text)	#featured seller name
+						seller_rating = spantag.find('div')
+						fe_seller_info.append(seller_rating.text)
+							#print(seller_rating.text)	#featured seller rating
+						fe_seller_info.append(price)
+						fe_seller_info.append(featured_seller_fa)
+
+					element_list.append(fe_seller_info)
 
 					if len(litag) > 0:
 						for lis in litag:
@@ -132,6 +157,7 @@ for page in range(1, 2):
 									other_seller_fa = 0
 								#print(other_seller_fa)
 								seller_info.append(other_seller_fa)
+
 								seller_list.append(seller_info)
 
 					#featured seller
@@ -148,6 +174,7 @@ for page in range(1, 2):
 							#print(seller_rating.text)	#featured seller rating
 							seller_info.append(price)
 							seller_info.append(featured_seller_fa)
+
 							seller_list.append(seller_info)
 
 					element_list.append(len(seller_list))
@@ -166,8 +193,17 @@ for page in range(1, 2):
 					a = div_tab.find('a')
 					#print(a.text)
 					product_url = 'https://www.flipkart.com' + a.get('href')
+					element_list.append(product_url)
 					driver.get(product_url)
 					soup1 = BeautifulSoup(driver.page_source, 'html.parser')
+					try:
+						titletag = soup1.find('div',{'class': 'aMaAEs'})
+						titletag2 = titletag.find('h1',{'class': 'yhB1nd'})
+						titletag3 = titletag2.find('span',{'class': 'B_NuCI'})
+						producttitle = titletag3.text
+						element_list.append(producttitle)
+					except:
+						element_list.append("")
 					results = soup1.find('div',{'class': '_3_L3jD'})
 					try:
 						spantag = results.find_all('span')
@@ -195,6 +231,21 @@ for page in range(1, 2):
 					seller_list = []
 
 					litag = soup1.find_all('li', {'class': '_38I6QT'})
+
+					sellertag = soup1.find_all('div',{'id': 'sellerName'})
+					for tag in sellertag:
+						fe_seller_info = []
+						spantag = tag.find('span')
+						seller_name = spantag.find('span')
+						fe_seller_info.append(seller_name.text)
+							#print(seller_name.text)	#featured seller name
+						seller_rating = spantag.find('div')
+						fe_seller_info.append(seller_rating.text)
+							#print(seller_rating.text)	#featured seller rating
+						fe_seller_info.append(price)
+						fe_seller_info.append(featured_seller_fa)
+
+					element_list.append(fe_seller_info)
 
 					#for other sellers
 					if len(litag) > 0:
@@ -240,6 +291,7 @@ for page in range(1, 2):
 									other_seller_fa = 0
 								#print(other_seller_fa)
 								seller_info.append(other_seller_fa)
+
 								seller_list.append(seller_info)
 
 					#featured seller
@@ -256,6 +308,7 @@ for page in range(1, 2):
 							#print(seller_rating.text)	#featured seller rating
 							seller_info.append(price)
 							seller_info.append(featured_seller_fa)
+
 							seller_list.append(seller_info)
 
 					element_list.append(len(seller_list))
@@ -264,5 +317,8 @@ for page in range(1, 2):
 					data_list.append(element_list)
 
 
-frame = pd.DataFrame(data_list, columns = ['Rank', 'Data-id', 'Product Rating', 'Product Review and Rating', 'No. of Sellers', 'Seller List'])
-frame.to_csv('Product_info.csv')
+frame = pd.DataFrame(data_list, columns = ['Rank', 'Data-id', 'Link', 'Title', 'Product Rating', 'Product Review and Rating', 'Featured Seller', 'No. of Sellers', 'Seller List'])
+frame.to_csv('laptop.csv')
+
+#for listele in data_list:
+#	print(listele)
